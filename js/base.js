@@ -18,6 +18,7 @@ Flood.init = function () {
 }
 
 Flood.start = function () {
+  Flood.active = 0
   Flood.count = 0
   Flood.start_grid()
   Flood.update_counter()
@@ -108,10 +109,13 @@ Flood.prepare_colorbox = function () {
 }
 
 Flood.update_blocks = function (color) {
+  Flood.active = 0
+
   for (let row of Flood.grid) {
     for (let item of row) {
       item.checked = false
       if (item.active) {
+        Flood.active += 1
         item.color = color
         Flood.set_color(item.block, color, [])
       }
@@ -156,8 +160,9 @@ Flood.prepare_counter = function () {
 
 Flood.update_counter = function () {
   Flood.el_counter.textContent = `Clicks: ${Flood.count} / ${Flood.limit}`
+  let won = Flood.active === Flood.size * Flood.size
 
-  if (Flood.count >= Flood.limit) {
+  if (won || Flood.count >= Flood.limit) {
     Flood.started = false
     Flood.el_counter.textContent += ` (Click Here To Restart)`
     Flood.audio_bell.play()
