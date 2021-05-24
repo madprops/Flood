@@ -61,6 +61,10 @@ body, html {
   cursor: pointer;
 }
 
+#colorbox .block:hover {
+  border-color: white;
+}
+
 .colorbox_row {
   display: flex;
   flex-direction: row;
