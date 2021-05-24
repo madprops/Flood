@@ -64,6 +64,7 @@ Flood.start_grid = function () {
       item.x = x
       item.y = y
       item.active = false
+      item.checked = false
       item.color = Flood.random_int(1, Flood.colors.length)
 
       let block = document.createElement("div")
