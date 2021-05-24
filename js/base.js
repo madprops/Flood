@@ -2,11 +2,14 @@ const Flood = {}
 Flood.size = 14
 Flood.limit = 25
 Flood.started = false
+Flood.music_started = false
 
 Flood.init = function () {
   Flood.el_grid = document.querySelector("#grid")
   Flood.el_colorbox = document.querySelector("#colorbox")
   Flood.el_counter = document.querySelector("#counter")
+  Flood.audio_laser = document.querySelector("#audio_laser")
+  Flood.audio_ambient = document.querySelector("#audio_ambient")
   Flood.get_style()
   Flood.prepare_colorbox()
   Flood.prepare_counter()
@@ -85,11 +88,17 @@ Flood.prepare_colorbox = function () {
     }
 
     if (e.target.classList.contains("block")) {
+      if (!Flood.music_started) {
+        Flood.audio_ambient.play()
+        Flood.music_started = true
+      }
+      
       let color = parseInt(e.target.dataset.color)
       Flood.fill(0, 0, color)
       Flood.update_blocks(color)
       Flood.count += 1
       Flood.update_counter()
+      Flood.audio_laser.play()
     }
   })
 }
