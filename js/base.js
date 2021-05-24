@@ -33,6 +33,7 @@ Flood.get_style = function () {
   let style = getComputedStyle(document.body)
 
   Flood.colors = [
+    "#ffffff",
     style.getPropertyValue("--color_1"),
     style.getPropertyValue("--color_2"),
     style.getPropertyValue("--color_3"),
@@ -42,13 +43,19 @@ Flood.get_style = function () {
   ]
 }
 
-Flood.set_active = function (item) {
+Flood.set_active = function (item, color) {
   item.active = true
+  Flood.active += 1
   item.block.classList.add("active")
 }
 
-Flood.set_color = function (block, color) {
-  block.style.backgroundColor = Flood.colors[color - 1]
+Flood.set_color = function (item, color) {
+  item.color = color
+  item.block.style.backgroundColor = Flood.colors[color]
+}
+
+Flood.random_color = function () {
+  return Flood.random_int(1, Flood.colors.length - 1)
 }
 
 Flood.start_grid = function () {
@@ -66,12 +73,11 @@ Flood.start_grid = function () {
       item.y = y
       item.active = false
       item.checked = false
-      item.color = Flood.random_int(1, Flood.colors.length)
 
       let block = document.createElement("div")
       block.classList.add("block")
-      Flood.set_color(block, item.color)
       item.block = block
+      Flood.set_color(item, Flood.random_color())
 
       row.push(item)
       elrow.append(block)
@@ -83,7 +89,7 @@ Flood.start_grid = function () {
 
   let first = Flood.grid[0][0]
   Flood.set_active(first)
-  first.block.style.backgroundColor = "white"
+  Flood.set_color(first, 0)
 }
 
 Flood.prepare_colorbox = function () {
@@ -100,7 +106,7 @@ Flood.prepare_colorbox = function () {
 
       let color = parseInt(e.target.dataset.color)
       Flood.fill(0, 0, color)
-      Flood.update_blocks(color)
+      Flood.reset_checked()
       Flood.count += 1
       Flood.update_counter()
       Flood.audio_laser.play()
@@ -108,17 +114,10 @@ Flood.prepare_colorbox = function () {
   })
 }
 
-Flood.update_blocks = function (color) {
-  Flood.active = 0
-
+Flood.reset_checked = function () {
   for (let row of Flood.grid) {
     for (let item of row) {
       item.checked = false
-      if (item.active) {
-        Flood.active += 1
-        item.color = color
-        Flood.set_color(item.block, color, [])
-      }
     }
   }
 }
@@ -142,7 +141,14 @@ Flood.fill = function (y, x, color) {
   let is_first = y === 0 && x === 0
   
   if (is_first || item.active || item.color === color) {
-    Flood.set_active(item)
+    if (!item.active) {
+      Flood.set_active(item, color)
+    }
+
+    if (item.color !== color) {
+      Flood.set_color(item, color)
+    }
+
     Flood.fill(y + 1, x, color)
     Flood.fill(y - 1, x, color)
     Flood.fill(y, x + 1, color)
