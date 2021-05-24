@@ -10,6 +10,7 @@ Flood.init = function () {
   Flood.el_counter = document.querySelector("#counter")
   Flood.audio_laser = document.querySelector("#audio_laser")
   Flood.audio_ambient = document.querySelector("#audio_ambient")
+  Flood.audio_bell = document.querySelector("#audio_bell")
   Flood.get_style()
   Flood.prepare_colorbox()
   Flood.prepare_counter()
@@ -78,7 +79,9 @@ Flood.start_grid = function () {
     Flood.el_grid.append(elrow)
   }
 
-  Flood.set_active(Flood.grid[0][0])
+  let first = Flood.grid[0][0]
+  Flood.set_active(first)
+  first.block.style.backgroundColor = "white"
 }
 
 Flood.prepare_colorbox = function () {
@@ -92,7 +95,7 @@ Flood.prepare_colorbox = function () {
         Flood.audio_ambient.play()
         Flood.music_started = true
       }
-      
+
       let color = parseInt(e.target.dataset.color)
       Flood.fill(0, 0, color)
       Flood.update_blocks(color)
@@ -156,5 +159,6 @@ Flood.update_counter = function () {
   if (Flood.count >= Flood.limit) {
     Flood.started = false
     Flood.el_counter.textContent += ` (Click Here To Restart)`
+    Flood.audio_bell.play()
   }
 }
