@@ -52,6 +52,7 @@ Flood.set_active = function (item, color) {
 
 Flood.set_color = function (item, color) {
   item.color = color
+  item.block.dataset.color = color
   item.block.style.backgroundColor = Flood.colors[color]
 }
 
@@ -96,6 +97,10 @@ Flood.start_grid = function () {
 }
 
 Flood.onclick = function (color) {
+  if (color === 0) {
+    return
+  }
+  
   if (!Flood.music_started) {
     Flood.audio_ambient.play()
     Flood.music_started = true
