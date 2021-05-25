@@ -12,6 +12,7 @@ Flood.init = function () {
   Flood.audio_ambient = document.querySelector("#audio_ambient")
   Flood.audio_bell = document.querySelector("#audio_bell")
   Flood.get_style()
+  Flood.prepare_blocks()
   Flood.prepare_colorbox()
   Flood.prepare_counter()
   Flood.start()
@@ -74,10 +75,12 @@ Flood.start_grid = function () {
       item.active = false
       item.checked = false
 
+      let color = Flood.random_color()
       let block = document.createElement("div")
       block.classList.add("block")
+      block.dataset.color = color
       item.block = block
-      Flood.set_color(item, Flood.random_color())
+      Flood.set_color(item, color)
 
       row.push(item)
       elrow.append(block)
@@ -92,6 +95,31 @@ Flood.start_grid = function () {
   Flood.set_color(first, 0)
 }
 
+Flood.onclick = function (color) {
+  if (!Flood.music_started) {
+    Flood.audio_ambient.play()
+    Flood.music_started = true
+  }
+
+  Flood.fill(0, 0, color)
+  Flood.reset_checked()
+  Flood.count += 1
+  Flood.update_counter()
+  Flood.audio_laser.play()
+}
+
+Flood.prepare_blocks = function () {
+  Flood.el_grid.addEventListener("click", (e) => {
+    if (!Flood.started) {
+      return
+    }
+
+    if (e.target.classList.contains("block")) {
+      Flood.onclick(parseInt(e.target.dataset.color))
+    }
+  })
+}
+
 Flood.prepare_colorbox = function () {
   Flood.el_colorbox.addEventListener("click", (e) => {
     if (!Flood.started) {
@@ -99,17 +127,7 @@ Flood.prepare_colorbox = function () {
     }
 
     if (e.target.classList.contains("block")) {
-      if (!Flood.music_started) {
-        Flood.audio_ambient.play()
-        Flood.music_started = true
-      }
-
-      let color = parseInt(e.target.dataset.color)
-      Flood.fill(0, 0, color)
-      Flood.reset_checked()
-      Flood.count += 1
-      Flood.update_counter()
-      Flood.audio_laser.play()
+      Flood.onclick(parseInt(e.target.dataset.color))
     }
   })
 }

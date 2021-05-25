@@ -61,22 +61,22 @@ body, html {
   cursor: pointer;
 }
 
-#colorbox .block:hover {
-  border-color: white;
-}
-
 .colorbox_row {
   display: flex;
   flex-direction: row;
 }
 
 #info {
-  margin-left: 8px;
+  display: flex;
+  margin-left: 16px;
+  justify-content: center;
+  flex-direction: column;
 }
 
 #grid {
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .grid_row {
@@ -89,6 +89,10 @@ body, html {
   height: 36px;
   border: 2px solid purple;
   border-radius: 25%;
+}
+
+.block:hover {
+  border-color: white;
 }
 
 .block.active {
