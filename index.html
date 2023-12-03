@@ -1,11 +1,14 @@
+<!DOCTYPE html>
+
 <html>
   <head>
     <title>Flood</title>
     <link rel="stylesheet" href="css/style.css" />
+    <script src="js/dom.js"></script>
     <script src="js/base.js"></script>
     <script>
       window.onload = function () {
-        Flood.init()
+        App.init()
       }
     </script>
   </head>
@@ -24,12 +27,12 @@
             <div class="block color_6" data-color=6></div>
           </div>
         </div>
-  
+
         <div id="info">
           <div>Starts at top left block</div>
           <div>Select color to flood region</div>
           <div>Win by flooding everything</div>
-        </div>  
+        </div>
       </div>
 
       <div id="grid"></div>
